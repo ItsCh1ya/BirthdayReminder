@@ -35,7 +35,6 @@ import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.maxkeppeler.sheets.calendar.models.CalendarStyle
 import ru.chiya.birthdatereminder.data.source.local.BirthdayEntity
 import ru.chiya.birthdatereminder.presentation.screen.add.isError
-import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
 
@@ -144,7 +143,7 @@ private fun SelectDatePeriod(date: MutableState<Date>) {
         }), config = CalendarConfig(
             yearSelection = false, monthSelection = true, style = CalendarStyle.MONTH
         ), selection = CalendarSelection.Date {
-            date.value = Date.from(it.atStartOfDay(ZoneId.systemDefault()).toInstant());
+            date.value = Date.from(it.atStartOfDay(ZoneId.systemDefault()).toInstant())
         })
     }
 }

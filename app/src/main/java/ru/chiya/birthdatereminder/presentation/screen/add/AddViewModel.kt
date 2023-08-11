@@ -9,7 +9,6 @@ import ru.chiya.birthdatereminder.data.source.local.BirthdayEntity
 import ru.chiya.birthdatereminder.domain.use_case.AddBirthdayUseCase
 import java.time.LocalDate
 import java.time.ZoneId
-import java.time.temporal.TemporalQueries.localDate
 import java.util.Date
 import javax.inject.Inject
 

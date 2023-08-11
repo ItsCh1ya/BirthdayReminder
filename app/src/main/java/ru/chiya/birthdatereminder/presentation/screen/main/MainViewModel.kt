@@ -1,8 +1,6 @@
 package ru.chiya.birthdatereminder.presentation.screen.main
 
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -17,7 +15,6 @@ import ru.chiya.birthdatereminder.domain.use_case.DeleteBirthdayUseCase
 import ru.chiya.birthdatereminder.domain.use_case.EditBirthdayUseCase
 import ru.chiya.birthdatereminder.domain.use_case.GetAllBirthdaysUseCase
 import ru.chiya.birthdatereminder.domain.use_case.GetAllCategoriesUseCase
-import java.time.LocalDate
 import java.time.ZoneId
 import java.util.Date
 import javax.inject.Inject
