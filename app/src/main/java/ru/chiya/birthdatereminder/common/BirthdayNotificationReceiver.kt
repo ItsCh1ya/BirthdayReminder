@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -14,20 +15,18 @@ class BirthdayNotificationReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
         if (context != null && intent != null) {
-            val birthdayName = intent.getStringExtra(BirthdayNotificationManager.EXTRA_BIRTHDAY_NAME)
-            if (!birthdayName.isNullOrEmpty()) {
-                val notification = buildNotification(context, birthdayName)
-                showNotification(context, notification)
-            }
+            val notification = buildNotification(context, intent)
+            showNotification(context, notification)
         }
     }
 
-    private fun buildNotification(context: Context, birthdayName: String): NotificationCompat.Builder {
+    private fun buildNotification(context: Context, intent: Intent?): NotificationCompat.Builder {
         val channelId = "birthday_channel" // Define your notification channel
+        val name = intent?.getStringExtra("name")
         return NotificationCompat.Builder(context, channelId)
-            .setSmallIcon(R.drawable.baseline_search_24)
+            .setSmallIcon(R.drawable.ic_launcher_foreground)
             .setContentTitle("Birthday Reminder")
-            .setContentText("It's $birthdayName's birthday today!")
+            .setContentText("It's ${name}'s birthday today!")
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(true)
     }

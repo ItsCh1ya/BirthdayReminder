@@ -11,6 +11,6 @@ class DeleteBirthdayUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(birthdayEntity: BirthdayEntity){
         repository.deleteBirthday(birthdayEntity)
-        notificationManager.cancelBirthdayNotification(birthdayEntity.id)
+        notificationManager.cancelBirthdayNotification(birthdayEntity)
     }
 }

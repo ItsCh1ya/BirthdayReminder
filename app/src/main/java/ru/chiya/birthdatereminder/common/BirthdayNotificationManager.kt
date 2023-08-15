@@ -1,17 +1,21 @@
 package ru.chiya.birthdatereminder.common
 
 import android.app.AlarmManager
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import ru.chiya.birthdatereminder.data.source.local.BirthdayEntity
 import java.util.*
 
 class BirthdayNotificationManager(private val context: Context) {
 
     fun scheduleBirthdayNotification(birthday: BirthdayEntity) {
+        createNotificationChannel()
         val nextBirthdayTime = calculateNextBirthdayTime(birthday.birthday)
-        val notificationIntent = createNotificationIntent(birthday.name)
+        val notificationIntent = createNotificationIntent(birthday)
         val pendingIntent = PendingIntent.getBroadcast(
             context,
             birthday.id,
@@ -27,11 +31,11 @@ class BirthdayNotificationManager(private val context: Context) {
         )
     }
 
-    fun cancelBirthdayNotification(birthdayId: Int) {
-        val notificationIntent = createNotificationIntent("") // Empty name
+    fun cancelBirthdayNotification(birthday: BirthdayEntity) {
+        val notificationIntent = createNotificationIntent(birthday) // Empty name
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            birthdayId,
+            birthday.id,
             notificationIntent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE
         )
@@ -41,7 +45,7 @@ class BirthdayNotificationManager(private val context: Context) {
     }
 
     fun updateBirthdayNotification(birthday: BirthdayEntity) {
-        cancelBirthdayNotification(birthday.id)
+        cancelBirthdayNotification(birthday)
         scheduleBirthdayNotification(birthday)
     }
 
@@ -62,13 +66,25 @@ class BirthdayNotificationManager(private val context: Context) {
         return calendar.time
     }
 
-    private fun createNotificationIntent(name: String): Intent {
+    private fun createNotificationIntent(birthday: BirthdayEntity): Intent {
         val intent = Intent(context, BirthdayNotificationReceiver::class.java)
-        intent.putExtra(EXTRA_BIRTHDAY_NAME, name)
+        intent.putExtra("name", birthday.name)
+        intent.putExtra("id", birthday.id)
+        intent.putExtra("description", birthday.description)
+        intent.putExtra("category", birthday.category)
         return intent
     }
+    private fun createNotificationChannel() {
+        val channelId = "birthday_channel"
+        val channelName = "Birthday Notifications"
+        val channelDescription = "Notifications for upcoming birthdays"
 
-    companion object {
-        const val EXTRA_BIRTHDAY_NAME = "extra_birthday_name"
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(channelId, channelName, importance).apply {
+            description = channelDescription
+        }
+
+        val notificationManager = context.getSystemService(NotificationManager::class.java)
+        notificationManager.createNotificationChannel(channel)
     }
 }
