@@ -10,6 +10,10 @@ class BirthRepositoryImpl(
         return dao.getBirthdays()
     }
 
+    override suspend fun getBirthdayById(id: Int): BirthdayEntity {
+        return dao.getBirthdayById(id)
+    }
+
     override suspend fun insertBirthday(birthday: BirthdayEntity) {
         dao.insertBirthday(
             birthday

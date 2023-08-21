@@ -20,6 +20,9 @@ interface BirthDao{
     @Query("SELECT DISTINCT category FROM birthday")
     fun getCategories(): List<String>
 
+    @Query("SELECT * FROM birthday WHERE id = :argId")
+    fun getBirthdayById(argId: Int): BirthdayEntity
+
     @Update
     fun updateBirthday(birthday: BirthdayEntity)
 
