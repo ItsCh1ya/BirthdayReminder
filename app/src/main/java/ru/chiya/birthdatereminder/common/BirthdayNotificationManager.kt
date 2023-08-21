@@ -24,9 +24,10 @@ class BirthdayNotificationManager(private val context: Context) {
         )
 
         val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        alarmManager.setExact(
+        alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             nextBirthdayTime.time,
+            AlarmManager.INTERVAL_DAY * 365, // FIXME: leap years will break it
             pendingIntent
         )
     }
