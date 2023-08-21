@@ -7,6 +7,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import androidx.compose.ui.res.integerArrayResource
 import ru.chiya.birthdatereminder.data.source.local.BirthdayEntity
 import java.util.*
 
@@ -20,6 +21,25 @@ class BirthdayNotificationManager(private val context: Context) {
             context,
             birthday.id,
             notificationIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE,
+        )
+
+        val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        alarmManager.setExact(
+            AlarmManager.RTC_WAKEUP,
+            nextBirthdayTime.time,
+            pendingIntent
+        )
+    }
+
+    fun continueScheduleBirthdayNotification(intent: Intent){
+        createNotificationChannel()
+        val nextBirthdayTime = calculateNextBirthdayTime(Date())
+        val id = intent.getIntExtra("id", 0)
+        val pendingIntent = PendingIntent.getBroadcast(
+            context,
+            id,
+            intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_MUTABLE,
         )
 
@@ -72,6 +92,7 @@ class BirthdayNotificationManager(private val context: Context) {
         intent.putExtra("id", birthday.id)
         intent.putExtra("description", birthday.description)
         intent.putExtra("category", birthday.category)
+        intent.putExtra("birthday", birthday.birthday.time)
         return intent
     }
     private fun createNotificationChannel() {

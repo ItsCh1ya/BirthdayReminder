@@ -10,10 +10,22 @@ import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import dagger.Module
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.chiya.birthdatereminder.BirthApp
 import ru.chiya.birthdatereminder.R
+import ru.chiya.birthdatereminder.data.repository.local.BirthDao
+import ru.chiya.birthdatereminder.data.repository.local.BirthDao_Impl
+import ru.chiya.birthdatereminder.data.repository.local.BirthDatabase_Impl
+import ru.chiya.birthdatereminder.data.repository.local.BirthRepositoryImpl
+import ru.chiya.birthdatereminder.domain.repository.BirthRepository
+import ru.chiya.birthdatereminder.domain.use_case.GetBirthdayById
 import ru.chiya.birthdatereminder.presentation.InfoActivity
 import ru.chiya.birthdatereminder.presentation.MainActivity
+import javax.inject.Inject
 
 class BirthdayNotificationReceiver : BroadcastReceiver() {
 
@@ -21,6 +33,8 @@ class BirthdayNotificationReceiver : BroadcastReceiver() {
         if (context != null && intent != null) {
             val notification = buildNotification(context, intent)
             showNotification(context, notification)
+            val birthdayNotificationManager = BirthdayNotificationManager(context)
+            birthdayNotificationManager.continueScheduleBirthdayNotification(intent)
         }
     }
 
